@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Megaphone, Plus, Trash2, Edit2 } from 'lucide-react';
@@ -33,14 +34,14 @@ export default function Notices() {
       }
       setShowModal(false);
       fetchNotices();
-    } catch (err) { console.error(err); alert("Not authorized or failed"); }
+    } catch (err) { console.error(err); toast.error("Not authorized or failed"); }
   };
 
   const handleDelete = async (id) => {
     try {
       await axios.delete(`http://localhost:5000/api/notices/${id}`);
       setNotices(notices.filter(n => n.id !== id));
-    } catch (err) { alert("Failed to delete notice"); }
+    } catch (err) { toast.error("Failed to delete notice"); }
   };
 
   const openModal = (notice = null) => {

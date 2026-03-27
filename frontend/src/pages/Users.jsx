@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users as UsersIcon, Trash2, Check, X, Shield, ShieldOff } from 'lucide-react';
@@ -36,7 +37,7 @@ export default function Users() {
       
       await axios.delete(`http://localhost:5000/api/users/${id}`, config);
       setUsers(users.filter(u => u.id !== id));
-    } catch (err) { alert("Failed to delete user"); }
+    } catch (err) { toast.error("Failed to delete user"); }
   };
 
   const handleUpdateStatus = async (id, status) => {
@@ -46,12 +47,15 @@ export default function Users() {
       if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
       
       await axios.put(`http://localhost:5000/api/users/${id}/status`, { status }, config);
-      if (status === 'rejected') {
+       if (status === 'rejected') {
          setUsers(users.filter(u => u.id !== id));
       } else {
          setUsers(users.map(u => u.id === id ? { ...u, status } : u));
       }
-    } catch (err) { alert("Failed to update status"); }
+    } catch (err) { 
+       console.error("Failed API req:", err.response);
+       toast.error(err.response?.data?.error || "Failed to update status"); 
+    }
   };
 
   const pendingRequests = users.filter(u => u.status === 'pending');

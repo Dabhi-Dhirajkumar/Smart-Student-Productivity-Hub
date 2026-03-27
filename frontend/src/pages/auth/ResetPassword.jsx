@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -36,7 +37,7 @@ export default function ResetPassword() {
     
     try {
       await axios.post('http://localhost:5000/api/auth/reset-password', { email, otp, newPassword: password });
-      alert("Password updated successfully!");
+      toast.success("Password updated successfully!");
       navigate('/login');
     } catch (err) {
       setLoading(false);

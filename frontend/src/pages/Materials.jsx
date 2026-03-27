@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Link as LinkIcon, Download, Trash2, Plus, Server, User } from 'lucide-react';
@@ -30,7 +31,7 @@ export default function Materials() {
       setIsModalOpen(false);
       setFormData({ title: '', subject: '', link: '' });
       fetchMaterials();
-    } catch (err) { alert('Failed to share learning resource.'); }
+    } catch (err) { toast.error('Failed to share learning resource.'); }
   };
 
   const deleteMaterial = async (id) => {
@@ -38,7 +39,7 @@ export default function Materials() {
     try {
       await axios.delete(`http://localhost:5000/api/materials/${id}`);
       fetchMaterials();
-    } catch (err) { alert('Failed to delete material'); }
+    } catch (err) { toast.error('Failed to delete material'); }
   };
 
   const directToLink = (url) => {

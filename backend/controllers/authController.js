@@ -26,11 +26,11 @@ exports.register = async (req, res) => {
 
     // Send email to user
     const msgBody = `
-      <p style="text-align: center; font-size: 16px;">Thank you for registering on <strong>Campus Companion</strong>.</p>
-      <p style="text-align: center; color: #a3a3a3;">Your account request has been successfully received and is currently <span style="color: #f59e0b; font-weight: bold;">pending admin approval</span>.</p>
-      <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center;">
-        <p style="margin: 0; font-size: 13px; color: #888;">You will receive another email as soon as an administrator reviews and approves your account.</p>
+      <p style="text-align: center; font-size: 16px;">Thank you for registering on <strong>CampusHub</strong>.</p>
+      <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; margin: 20px 0; text-align: left;">
+        <p style="margin: 0; color: #555;">Your account request has been successfully received and is currently <strong>pending admin approval</strong>.</p>
       </div>
+      <p style="text-align: center; font-size: 14px; color: #777;">You will receive another email as soon as an administrator reviews and approves your account.</p>
     `;
     const emailHtml = getEmailTemplate('Registration Received', name, msgBody);
     await sendEmail(email, 'Registration Received - Campus Companion', emailHtml);
@@ -140,9 +140,11 @@ exports.forgotPassword = async (req, res) => {
     const msgBody = `
       <p style="text-align: center;">We received a request to reset your password. Here is your One-Time Password (OTP):</p>
       <div style="text-align: center; margin: 30px 0;">
-        <span style="background: #2a2a2a; color: #fff; padding: 15px 30px; border-radius: 12px; font-size: 32px; font-weight: 800; letter-spacing: 8px; border: 1px solid #444; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: inline-block;">${otp}</span>
+        <span style="background-color: #f0f4f8; color: #1e293b; padding: 15px 30px; border-radius: 8px; font-size: 32px; font-weight: 800; letter-spacing: 8px; border: 1px solid #cbd5e1; display: inline-block;">
+          <a href="#" style="color: #1e293b; text-decoration: none; cursor: default;">${otp}</a>
+        </span>
       </div>
-      <p style="text-align: center; color: #ff4d4d; font-size: 13px; margin-top: 10px;">⚠️ This OTP is valid for exactly 15 minutes.</p>
+      <p style="text-align: center; color: #ef4444; font-size: 13px; margin-top: 10px; font-weight: 500;">⚠️ This OTP is valid for exactly 15 minutes.</p>
       <p style="text-align: center; font-size: 13px; color: #888;">If you did not request a password reset, please ignore this email or contact support.</p>
     `;
     const userResult = result.rows[0];

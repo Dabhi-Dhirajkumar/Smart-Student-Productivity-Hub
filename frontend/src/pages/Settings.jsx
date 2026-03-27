@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Settings as SettingsIcon, Moon, Sun, Monitor, Bell, Lock, Activity, Sparkles } from 'lucide-react';
@@ -138,7 +139,7 @@ export default function Settings() {
                          </button>
                       </div>
                       <div className="pt-6 mt-4 border-t border-black/5 dark:border-white/5 space-y-4">
-                         <button onClick={()=>alert("Change password wizard launched!")} className="w-full btn-secondary flex justify-center py-3">Update Password</button>
+                         <button onClick={()=>toast.success("Change password wizard launched!")} className="w-full btn-secondary flex justify-center py-3">Update Password</button>
                          <button onClick={()=>window.confirm("Are you incredibly sure you want to permanently delete your account?")} className="w-full border border-red-500/50 text-red-500 hover:bg-red-500/10 transition-colors py-3 rounded-xl font-bold">Terminate Account</button>
                       </div>
                    </div>

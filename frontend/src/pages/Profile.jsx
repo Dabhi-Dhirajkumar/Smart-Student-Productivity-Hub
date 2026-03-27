@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User as UserIcon, Mail, Award, Key, Save, Edit3, Shield } from 'lucide-react';
@@ -22,7 +23,7 @@ export default function Profile() {
       // Update local storage token simulation just by resetting state mostly - 
       // actual implementation could refresh token if token contains name/theme
       window.location.reload(); 
-    } catch (err) { alert('Failed to update profile'); }
+    } catch (err) { toast.error('Failed to update profile'); }
   };
 
   return (

@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useGoogleLogin } from '@react-oauth/google';
+import toast from 'react-hot-toast';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -48,8 +49,10 @@ export default function Login() {
     
     try {
       await login(email, password);
+      toast.success('Successfully logged in!');
       navigate('/dashboard');
     } catch (err) {
+      toast.error(err.response?.data?.error || 'Login failed');
       setServerError(err.response?.data?.error || 'Login failed');
     }
   };
@@ -59,8 +62,10 @@ export default function Login() {
       try {
         setServerError('');
         await googleLogin(tokenResponse.access_token);
+        toast.success('Successfully logged in with Google!');
         navigate('/dashboard');
       } catch (err) {
+        toast.error(err.response?.data?.error || 'Google Login failed');
         setServerError(err.response?.data?.error || 'Google Login failed');
       }
     },

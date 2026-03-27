@@ -69,8 +69,10 @@ exports.updateUserStatus = async (req, res) => {
        await db.query('DELETE FROM Users WHERE id = $1', [id]);
        const msgBody = `
          <p style="text-align: center; font-size: 16px;">We have reviewed your registration request.</p>
-         <p style="text-align: center; color: #f87171;">Unfortunately, your request to join Campus Companion has been <span style="font-weight: bold;">rejected</span> by the administration.</p>
-         <p style="text-align: center; color: #a3a3a3; font-size: 14px; margin-top: 20px;">If you feel this was a mistake, please reach out to the campus administration office directly for clarification.</p>
+         <div style="background-color: #fef2f2; border: 1px solid #fee2e2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 4px; margin: 20px 0;">
+           <p style="margin: 0; color: #7f1d1d;">Unfortunately, your request to join CampusHub has been <strong>rejected</strong> by the administration.</p>
+         </div>
+         <p style="text-align: center; color: #666; font-size: 14px; margin-top: 20px;">If you feel this was a mistake, please reach out to the campus administration office directly for clarification.</p>
        `;
        const emailHtml = getEmailTemplate('Registration Update', user.name, msgBody);
        await sendEmail(user.email, 'Update on Your Campus Companion Account', emailHtml);
@@ -80,13 +82,13 @@ exports.updateUserStatus = async (req, res) => {
        if (user.status === 'pending' && status === 'active') {
          const msgBody = `
            <div style="text-align: center; margin-bottom: 20px;">
-             <span style="display: inline-block; background: #22c55e; color: #fff; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px;">APPROVED</span>
+             <span style="display: inline-block; background-color: #dcfce7; color: #166534; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 14px; border: 1px solid #bbf7d0;">APPROVED</span>
            </div>
-           <p style="text-align: center; font-size: 18px; color: #e5e5e5;">Congratulations!</p>
-           <p style="text-align: center; color: #a3a3a3; line-height: 1.6;">Your Campus Companion account has been fully approved by the administration team.</p>
-           <p style="text-align: center; color: #a3a3a3; line-height: 1.6;">You can now safely log in to the portal and access all your personalized modules, schedules, and analytics.</p>
+           <p style="text-align: center; font-size: 18px; color: #333;">Congratulations!</p>
+           <p style="text-align: center; color: #555; line-height: 1.6;">Your CampusHub account has been fully approved by the administration team.</p>
+           <p style="text-align: center; color: #555; line-height: 1.6;">You can now safely log in to the portal and access all your personalized modules.</p>
            <div style="text-align: center; margin-top: 30px;">
-             <a href="http://localhost:5173/login" style="background: linear-gradient(135deg, #a855f7 0%, #d946ef 100%); color: #fff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: bold; display: inline-block; box-shadow: 0 4px 15px rgba(217, 70, 239, 0.4);">LOGIN TO DASHBOARD</a>
+             <a href="http://localhost:5173/login" style="background-color: #5a2e98; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; display: inline-block;">Login to Dashboard</a>
            </div>
          `;
          const emailHtml = getEmailTemplate('Account Approved!', user.name, msgBody);

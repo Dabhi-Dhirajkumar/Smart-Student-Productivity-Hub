@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Send, MessageSquare } from 'lucide-react';
@@ -27,7 +28,7 @@ export default function Feedback() {
       setSubject('');
       setMessage('');
       setTimeout(() => setSent(false), 3000);
-    } catch (err) { alert('Failed to send feedback'); }
+    } catch (err) { toast.error('Failed to send feedback'); }
   };
 
   return (

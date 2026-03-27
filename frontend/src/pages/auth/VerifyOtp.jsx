@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -50,9 +51,9 @@ export default function VerifyOtp() {
   const handleResend = async () => {
      try {
        await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
-       alert("OTP resent!");
+       toast.success("OTP resent!");
      } catch (err) {
-       alert("Failed to resend OTP");
+       toast.error("Failed to resend OTP");
      }
   };
 

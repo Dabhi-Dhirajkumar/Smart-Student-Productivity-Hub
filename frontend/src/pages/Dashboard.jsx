@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Activity, BookOpen, Clock, AlertTriangle, ShieldCheck, Users, Megaphone, Terminal, FileText, Database } from 'lucide-react';
@@ -15,21 +16,26 @@ export default function Dashboard() {
 
 // Student Dashboard
 function StudentDashboard() {
+  const { token } = useAuth();
   const [stats, setStats] = useState({ pending: 0, completed: 0, studyHours: 24, alerts: 0 });
   const [latestNotices, setLatestNotices] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/tasks').then(res => {
+    const config = { headers: {} };
+    const localToken = localStorage.getItem('token') || token;
+    if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
+
+    axios.get('http://localhost:5000/api/tasks', config).then(res => {
       const p = res.data.filter(t => t.status === 'Pending').length;
       const c = res.data.filter(t => t.status === 'Completed').length;
       setStats(prev => ({...prev, pending: p, completed: c}));
     }).catch(console.error);
 
-    axios.get('http://localhost:5000/api/notices').then(res => {
+    axios.get('http://localhost:5000/api/notices', config).then(res => {
       setLatestNotices(res.data.slice(0, 2));
       setStats(prev => ({...prev, alerts: res.data.length}));
     }).catch(console.error);
-  }, []);
+  }, [token]);
 
   return (
     <div className="space-y-6 pb-10">
@@ -82,18 +88,23 @@ function StudentDashboard() {
 
 // Faculty Dashboard
 function FacultyDashboard() {
+  const { token } = useAuth();
   const [stats, setStats] = useState({ activeStudents: 0, notices: 0 });
   const [materials, setMaterials] = useState([]);
   const [notices, setNotices] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/users/students').then(res => setStats(prev => ({...prev, activeStudents: res.data.length}))).catch(()=>{});
-    axios.get('http://localhost:5000/api/notices').then(res => {
+    const config = { headers: {} };
+    const localToken = localStorage.getItem('token') || token;
+    if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
+
+    axios.get('http://localhost:5000/api/users/students', config).then(res => setStats(prev => ({...prev, activeStudents: res.data.length}))).catch(()=>{});
+    axios.get('http://localhost:5000/api/notices', config).then(res => {
       setStats(prev => ({...prev, notices: res.data.length}));
       setNotices(res.data.slice(0, 3));
     }).catch(console.error);
-    axios.get('http://localhost:5000/api/materials').then(res => setMaterials(res.data.slice(0, 3))).catch(()=>{});
-  }, []);
+    axios.get('http://localhost:5000/api/materials', config).then(res => setMaterials(res.data.slice(0, 3))).catch(()=>{});
+  }, [token]);
 
   return (
     <div className="space-y-6 pb-10">
@@ -139,23 +150,46 @@ function FacultyDashboard() {
 
 // Admin Dashboard
 function AdminDashboard() {
+  const { token } = useAuth();
   const [stats, setStats] = useState({ users: 0, feedbacks: 0, notices: 0 });
   const [logs, setLogs] = useState([]);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const u = await axios.get('http://localhost:5000/api/users').catch(()=>({data:[]}));
-      const f = await axios.get('http://localhost:5000/api/feedback').catch(()=>({data:[]}));
-      const n = await axios.get('http://localhost:5000/api/notices').catch(()=>({data:[]}));
-      const l = await axios.get('http://localhost:5000/api/ai/logs').catch(()=>({data:[]}));
+      const config = { headers: {} };
+      const localToken = localStorage.getItem('token') || token;
+      if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
+
+      const u = await axios.get('http://localhost:5000/api/users', config).catch(()=>({data:[]}));
+      const f = await axios.get('http://localhost:5000/api/feedback', config).catch(()=>({data:[]}));
+      const n = await axios.get('http://localhost:5000/api/notices', config).catch(()=>({data:[]}));
+      const l = await axios.get('http://localhost:5000/api/ai/logs', config).catch(()=>({data:[]}));
       
       setStats({ users: u.data.length, feedbacks: f.data.length, notices: n.data.length });
       setFeedbacks(f.data.slice(0, 3));
       setLogs(l.data.slice(0, 3));
+      
+      const pending = u.data.filter(user => user.status === 'pending');
+      setPendingRequests(pending.slice(0, 4));
     };
     fetchData();
-  }, []);
+  }, [token]);
+
+  const handleUpdateStatus = async (id, status) => {
+    try {
+      const config = { headers: {} };
+      const localToken = localStorage.getItem('token') || token;
+      if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
+      
+      await axios.put(`http://localhost:5000/api/users/${id}/status`, { status }, config);
+      setPendingRequests(prev => prev.filter(u => u.id !== id));
+      if (status === 'active') {
+        setStats(prev => ({ ...prev, users: prev.users + 1 }));
+      }
+    } catch (err) { toast.error(err.response?.data?.error || "Failed to update status"); }
+  };
 
   return (
     <div className="space-y-6 pb-10">
@@ -164,6 +198,29 @@ function AdminDashboard() {
         <StatCard icon={<AlertTriangle className="text-secondary" />} title="Pending Feedback" value={stats.feedbacks} desc="User-submitted tickets" path="/feedback" />
         <StatCard icon={<Megaphone className="text-accent" />} title="Global Connectivity" value={stats.notices} desc="Active server broadcasts" path="/notices" />
       </div>
+
+      {pendingRequests.length > 0 && (
+      <div className="glass-card p-6 border-t-4 border-t-primary">
+         <div className="flex justify-between items-center mb-4">
+            <h3 className="text-lg font-bold text-textMain flex items-center"><ShieldCheck size={18} className="mr-2 text-primary"/> Pending Registrations</h3>
+            <Link to="/users" className="text-primary text-sm hover:underline">Manage All</Link>
+         </div>
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {pendingRequests.map(u => (
+              <div key={u.id} className="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-between">
+                 <div>
+                    <h4 className="font-semibold text-white text-sm">{u.name}</h4>
+                    <p className="text-xs text-textMuted uppercase">{u.role}</p>
+                 </div>
+                 <div className="flex items-center space-x-2 bg-black/20 p-1.5 rounded-full border border-white/5 shadow-inner">
+                    <button onClick={() => handleUpdateStatus(u.id, 'rejected')} className="px-3 py-1.5 rounded-full text-xs font-semibold select-none transition-all duration-300 bg-transparent text-textMuted hover:bg-red-500/80 hover:text-white">Reject</button>
+                    <button onClick={() => handleUpdateStatus(u.id, 'active')} className="px-3 py-1.5 rounded-full text-xs font-semibold select-none transition-all duration-300 bg-transparent text-textMuted hover:bg-green-500/80 hover:text-white">Approve</button>
+                 </div>
+              </div>
+            ))}
+         </div>
+      </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
          <div className="glass-card p-6 border-t-4 border-t-secondary flex flex-col">

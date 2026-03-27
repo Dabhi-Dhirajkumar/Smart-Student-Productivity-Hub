@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Timer, Play, Pause, RotateCcw, Brain, Activity } from 'lucide-react';
@@ -13,7 +14,7 @@ export default function FocusTimer() {
       interval = setInterval(() => setTimeLeft(t => t - 1), 1000);
     } else if (timeLeft === 0) {
       setIsActive(false);
-      alert('Session Complete!');
+      toast.success('Session Complete!');
     }
     return () => clearInterval(interval);
   }, [isActive, timeLeft]);

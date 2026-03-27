@@ -25,9 +25,18 @@ import StudentRoster from './pages/StudentRoster';
 import FocusTimer from './pages/FocusTimer';
 import Materials from './pages/Materials';
 
+import { Toaster } from 'react-hot-toast';
+
 export default function App() {
   return (
     <Router>
+      <Toaster position="top-right" toastOptions={{
+        style: {
+          background: '#1a1a1a',
+          color: '#fff',
+          border: '1px solid #333',
+        },
+      }} />
       <Routes>
         {/* Public Routes */}
         <Route path="/landing" element={<Landing />} />

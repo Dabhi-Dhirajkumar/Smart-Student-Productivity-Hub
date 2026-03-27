@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar as CalendarIcon, Clock, Sparkles, MapPin, Plus, Trash2, Edit2 } from 'lucide-react';
@@ -57,7 +58,7 @@ export default function Schedule() {
   const generateAIschedule = async () => {
     try {
       const res = await axios.post('http://localhost:5000/api/ai/schedule', {});
-      alert("System mapped out optimal timings! Note: In a real system, it would automatically save to your calendar here.");
+      toast.success("System mapped out optimal timings! Note: In a real system, it would automatically save to your calendar here.");
     } catch (err) { console.error(err); }
   };
 

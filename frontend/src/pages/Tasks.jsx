@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, CheckCircle, Circle, AlertCircle, Sparkles, Trash2, Edit2 } from 'lucide-react';
@@ -90,7 +91,7 @@ export default function Tasks() {
           }
        }
        setTasks(updated);
-       alert("System successfully analyzed and reprioritized your tasks.");
+       toast.success("System successfully analyzed and reprioritized your tasks.");
     } catch (err) { console.error('System Error', err); }
   };
 

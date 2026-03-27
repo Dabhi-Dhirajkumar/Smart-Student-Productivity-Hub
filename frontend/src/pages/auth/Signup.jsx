@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -41,12 +42,9 @@ export default function Signup() {
     return newErrors;
   };
 
-  const [successMsg, setSuccessMsg] = useState('');
-
   const handleSignup = async (e) => {
     e.preventDefault();
     setServerError('');
-    setSuccessMsg('');
     
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -57,10 +55,11 @@ export default function Signup() {
     
     try {
       await register(formData.name, formData.email, formData.password, formData.role);
-      setSuccessMsg('Registration sent! Please wait for Admin approval. An email will be sent to you once approved or rejected.');
+      toast.success('Registration sent! Please wait for Admin approval.', { duration: 5000 });
       // Optional: Delay navigation or let user click to login
-      setTimeout(() => navigate('/login'), 6000);
+      setTimeout(() => navigate('/login'), 4000);
     } catch (err) {
+      toast.error(err.response?.data?.error || 'Signup failed');
       setServerError(err.response?.data?.error || 'Signup failed');
     }
   };
@@ -71,13 +70,12 @@ export default function Signup() {
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-accent/20 rounded-full blur-[120px] pointer-events-none -z-10"></div>
 
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 md:p-10 relative z-10 rounded-3xl shadow-[0_0_40px_rgba(232,121,249,0.2)]">
-          <div className="text-center mb-8">
+         <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-white mb-2 tracking-wide">Create Account</h2>
             <p className="text-textMuted text-sm">Join Campus Companion today.</p>
          </div>
          
          {serverError && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg text-sm text-center">{serverError}</div>}
-         {successMsg && <div className="mb-4 p-4 bg-green-500/10 border border-green-500/50 text-green-400 rounded-lg text-sm text-center font-medium leading-relaxed">{successMsg}</div>}
 
          <form onSubmit={handleSignup} className="space-y-4">
             <div>

@@ -2,21 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, Mail, Clock, CheckCircle } from 'lucide-react';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
 export default function StudentRoster() {
+  const { token } = useAuth();
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/users/students');
+        const config = { headers: {} };
+        const localToken = localStorage.getItem('token') || token;
+        if (localToken) config.headers.Authorization = `Bearer ${localToken}`;
+        
+        const res = await axios.get('http://localhost:5000/api/users/students', config);
         setStudents(res.data);
       } catch (err) { console.error(err); }
       setLoading(false);
     };
     fetchStudents();
-  }, []);
+  }, [token]);
 
   return (
     <div className="space-y-6 font-poppins pb-10">

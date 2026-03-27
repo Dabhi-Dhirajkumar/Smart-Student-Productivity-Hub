@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Book, Plus, Trash2, Edit2, Bookmark, User, Tag } from 'lucide-react';
@@ -32,7 +33,7 @@ export default function Courses() {
       setFormData({ title: '', department: '', instructor: '', credits: 3 });
       setEditingId(null);
       fetchCourses();
-    } catch (err) { alert('Operation failed!'); }
+    } catch (err) { toast.error('Operation failed!'); }
   };
 
   const startEdit = (course) => {
@@ -46,7 +47,7 @@ export default function Courses() {
     try {
       await axios.delete(`http://localhost:5000/api/courses/${id}`);
       fetchCourses();
-    } catch (err) { alert('Failed to delete course'); }
+    } catch (err) { toast.error('Failed to delete course'); }
   };
 
   return (
