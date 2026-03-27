@@ -19,21 +19,15 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      // API call to our backend AI Chat endpoint
-      // const res = await axios.post('http://localhost:5000/api/ai/chat', { query: input });
+      // Real API call to Backend
+      const res = await axios.post('http://localhost:5000/api/ai/chat', { query: newMsg.text });
       
-      // Mocked delay
-      setTimeout(() => {
-        let text = "I've analyzed your context. Let me suggest a plan for you.";
-        if(input.toLowerCase().includes('urgent')) text = "You have 2 high priority tasks. Focus on Web Tech first!";
-        if(input.toLowerCase().includes('schedule')) text = "I've mapped out a smart schedule for you between 9 AM and 5 PM avoiding your class times.";
-        
-        setMessages(prev => [...prev, { id: Date.now()+1, text, sender: 'ai' }]);
-        setLoading(false);
-      }, 1500);
+      setMessages(prev => [...prev, { id: Date.now()+1, text: res.data.response, sender: 'ai' }]);
+      setLoading(false);
 
     } catch (error) {
-       console.error(error);
+       console.error("AI Communication Failed", error);
+       setMessages(prev => [...prev, { id: Date.now()+1, text: 'I am currently unable to reach the neural gateway. Try again later.', sender: 'ai' }]);
        setLoading(false);
     }
   };
