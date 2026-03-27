@@ -13,6 +13,9 @@ CREATE TABLE Users (
     password_hash VARCHAR(255) NOT NULL,
     role VARCHAR(50) DEFAULT 'Student', -- Student, Faculty, Admin
     theme VARCHAR(20) DEFAULT 'dark',
+    status VARCHAR(20) DEFAULT 'pending', -- pending, active, inactive
+    reset_otp VARCHAR(10),
+    reset_otp_expiry TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,3 +68,12 @@ CREATE TABLE AI_logs (
 -- Insert dummy notice (assigned to a null user for global broadcast if needed, or we just allow null user_id)
 ALTER TABLE Notices ALTER COLUMN user_id DROP NOT NULL;
 INSERT INTO Notices (title, content) VALUES ('Welcome to Campus Companion', 'Manage your workflow intelligently.');
+
+CREATE TABLE Materials (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    link TEXT NOT NULL,
+    uploaded_by VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

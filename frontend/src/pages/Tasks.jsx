@@ -76,7 +76,7 @@ export default function Tasks() {
   };
 
   const aiPredictPriorities = async () => {
-    // We send current tasks to AI /priority endpoint to optimize them based on deadline
+    // We send current tasks to System /priority endpoint to optimize them based on deadline
     // Real API integration
     try {
        const updated = [...tasks];
@@ -90,8 +90,8 @@ export default function Tasks() {
           }
        }
        setTasks(updated);
-       alert("AI successfully analyzed and reprioritized your tasks.");
-    } catch (err) { console.error('AI Error', err); }
+       alert("System successfully analyzed and reprioritized your tasks.");
+    } catch (err) { console.error('System Error', err); }
   };
 
   const filteredTasks = tasks.filter(t => filter === 'All' ? true : t.status === filter);

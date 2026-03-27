@@ -16,6 +16,8 @@ const eventRoutes = require('./routes/eventRoutes');
 const noticeRoutes = require('./routes/noticeRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
 const aiRoutes = require('./routes/aiRoutes');
+const courseRoutes = require('./routes/courseRoutes');
+const materialRoutes = require('./routes/materialRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -23,6 +25,8 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/notices', noticeRoutes);
 app.use('/api/feedback', feedbackRoutes);
+app.use('/api/courses', courseRoutes);
+app.use('/api/materials', materialRoutes);
 app.use('/api/ai', aiRoutes);
 
 app.get('/api/health', (req, res) => {

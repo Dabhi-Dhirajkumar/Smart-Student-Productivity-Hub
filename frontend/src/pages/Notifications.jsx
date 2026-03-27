@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, AlertTriangle, CheckCircle, Info, Trash2 } from 'lucide-react';
 
 const initialNotifs = [
-  { id: 1, type: 'warning', text: "AI predicts your 'Maths Assignment' will be delayed.", time: '10 mins ago', read: false },
+  { id: 1, type: 'warning', text: "System predicts your 'Maths Assignment' will be delayed.", time: '10 mins ago', read: false },
   { id: 2, type: 'info', text: "Suggested schedule generated for remaining tasks.", time: '2 hours ago', read: false },
   { id: 3, type: 'success', text: "Task 'Web Tech Lab' completed successfully.", time: '1 day ago', read: true },
 ];
@@ -30,7 +30,7 @@ export default function Notifications() {
            <h2 className="text-3xl font-bold text-white flex items-center">
              Notifications <Bell className="ml-3 text-primary animate-pulse" />
            </h2>
-           <p className="text-textMuted text-sm mt-1">Smart alerts managed by your AI Companion.</p>
+           <p className="text-textMuted text-sm mt-1">Smart alerts managed by your Virtual Companion.</p>
         </div>
         <button onClick={markAllRead} className="text-sm font-medium text-textMuted hover:text-white transition-colors">Mark all reading</button>
       </div>

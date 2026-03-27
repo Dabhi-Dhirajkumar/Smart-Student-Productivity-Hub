@@ -61,13 +61,22 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const googleLogin = async (token) => {
+    const res = await axios.post('http://localhost:5000/api/auth/google', { token });
+    localStorage.setItem('token', res.data.token);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+    setUser(res.data.user);
+    applyTheme(res.data.user.theme);
+    return res.data;
+  };
+
   const updateThemeSync = (themeValue) => {
      setUser(prev => ({...prev, theme: themeValue}));
      applyTheme(themeValue);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading, updateThemeSync }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading, updateThemeSync, googleLogin }}>
       {!loading && children}
     </AuthContext.Provider>
   );

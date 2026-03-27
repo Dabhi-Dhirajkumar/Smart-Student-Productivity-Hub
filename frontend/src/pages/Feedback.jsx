@@ -34,7 +34,7 @@ export default function Feedback() {
     <div className="max-w-4xl mx-auto space-y-8 font-poppins">
       <div className="mb-6">
          <h2 className="text-3xl font-bold text-white flex items-center">System Feedback <MessageSquare className="ml-3 text-accent" /></h2>
-         <p className="text-textMuted text-sm mt-1">Help us improve the Campus Companion AI by sharing your suggestions.</p>
+         <p className="text-textMuted text-sm mt-1">Help us improve the Campus Companion by sharing your suggestions.</p>
       </div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-6 md:p-10 relative overflow-hidden group">
@@ -42,7 +42,7 @@ export default function Feedback() {
          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             <div>
                <label className="text-xs text-textMuted uppercase tracking-wider mb-2 block font-semibold">Subject</label>
-               <input type="text" required value={subject} onChange={e=>setSubject(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-accent transition-colors shadow-inner" placeholder="E.g., Bug with Calendar AI" />
+               <input type="text" required value={subject} onChange={e=>setSubject(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-accent transition-colors shadow-inner" placeholder="E.g., Bug with Calendar System" />
             </div>
             <div>
                <label className="text-xs text-textMuted uppercase tracking-wider mb-2 block font-semibold">Message & Context</label>

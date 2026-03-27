@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, MessageSquare, Calendar, Settings, Bell, Menu, X, User, BarChart2, BellRing, Megaphone, HelpCircle, LogOut, Users } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, MessageSquare, Calendar, Settings, Bell, Menu, X, User, BarChart2, BellRing, Megaphone, HelpCircle, LogOut, Users, Book, Terminal, Activity, CheckCircle, Database } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 
@@ -17,11 +17,16 @@ export default function Layout({ children }) {
   // Role based navigation filtering
   const navItems = [
     { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', roles: ['Student', 'Faculty', 'Admin'] },
+    { icon: Database, label: 'Materials', path: '/materials', roles: ['Student', 'Faculty', 'Admin'] },
+    { icon: Terminal, label: 'System Logs', path: '/system-logs', roles: ['Admin'] },
     { icon: Users, label: 'User Management', path: '/users', roles: ['Admin'] },
+    { icon: Book, label: 'Courses Admin', path: '/courses', roles: ['Admin'] },
     { icon: CheckSquare, label: 'Task Manager', path: '/tasks', roles: ['Student'] },
+    { icon: Activity, label: 'Focus Timer', path: '/timer', roles: ['Student'] },
+    { icon: CheckCircle, label: 'Student Roster', path: '/roster', roles: ['Faculty'] },
     { icon: Calendar, label: 'Schedule', path: '/schedule', roles: ['Student', 'Faculty'] },
     { icon: Megaphone, label: 'Notices', path: '/notices', roles: ['Student', 'Faculty', 'Admin'] },
-    { icon: MessageSquare, label: 'AI Assistant', path: '/chat', roles: ['Student', 'Faculty'] },
+    { icon: MessageSquare, label: 'Virtual Assistant', path: '/chat', roles: ['Student', 'Faculty'] },
     { icon: BarChart2, label: 'Analytics', path: '/analytics', roles: ['Student', 'Admin'] },
     { icon: HelpCircle, label: 'Feedback', path: '/feedback', roles: ['Student', 'Faculty', 'Admin'] },
     { icon: BellRing, label: 'Notifications', path: '/notifications', roles: ['Student', 'Faculty', 'Admin'] },
@@ -104,7 +109,7 @@ export default function Layout({ children }) {
               </Link>
               <Link to="/profile" className="hidden sm:flex items-center px-4 py-2 glass-card rounded-full space-x-2 border hover:border-white/30 transition-colors cursor-pointer text-textMuted hover:text-white">
                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                 <span className="text-xs font-medium ">AI Agent Online</span>
+                 <span className="text-xs font-medium ">System Online</span>
               </Link>
            </div>
         </header>

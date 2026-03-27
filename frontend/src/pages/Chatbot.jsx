@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Bot, User, Sparkles } from 'lucide-react';
+import axios from 'axios';
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I am your AI Campus Companion. You can ask me to organize your schedule or prioritize tasks.", sender: 'ai' }
+    { id: 1, text: "Hello! I am your System Campus Companion. You can ask me to organize your schedule or prioritize tasks.", sender: 'ai' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -26,7 +27,7 @@ export default function Chatbot() {
       setLoading(false);
 
     } catch (error) {
-       console.error("AI Communication Failed", error);
+       console.error("System Communication Failed", error);
        setMessages(prev => [...prev, { id: Date.now()+1, text: 'I am currently unable to reach the neural gateway. Try again later.', sender: 'ai' }]);
        setLoading(false);
     }
@@ -42,7 +43,7 @@ export default function Chatbot() {
             <div className="absolute inset-0 bg-accent/20 blur-md rounded-2xl"></div>
          </div>
          <div>
-            <h2 className="text-2xl font-bold text-white tracking-wide">AI Assistant</h2>
+            <h2 className="text-2xl font-bold text-white tracking-wide">Virtual Assistant</h2>
             <p className="text-textMuted text-sm flex items-center">
                <span className="w-1.5 h-1.5 rounded-full bg-green-400 mr-2 shadow-[0_0_8px_rgba(74,222,128,1)] animate-pulse"></span>
                Online & Ready

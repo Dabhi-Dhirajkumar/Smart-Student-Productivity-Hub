@@ -57,7 +57,7 @@ export default function Schedule() {
   const generateAIschedule = async () => {
     try {
       const res = await axios.post('http://localhost:5000/api/ai/schedule', {});
-      alert("AI mapped out optimal timings! Note: In a real system, it would automatically save to your calendar here.");
+      alert("System mapped out optimal timings! Note: In a real system, it would automatically save to your calendar here.");
     } catch (err) { console.error(err); }
   };
 
@@ -79,7 +79,7 @@ export default function Schedule() {
            <h2 className="text-3xl font-bold font-poppins text-white flex items-center">
              Smart Schedule <CalendarIcon className="ml-3 text-secondary animate-pulse" />
            </h2>
-           <p className="text-textMuted text-sm mt-1">Manage and sync AI-optimized timetables dynamically.</p>
+           <p className="text-textMuted text-sm mt-1">Manage and sync System-optimized timetables dynamically.</p>
         </div>
         <div className="flex space-x-3">
           <button onClick={generateAIschedule} className="btn-secondary flex items-center shadow-[0_0_15px_rgba(14,165,233,0.3)] hover:border-secondary group text-xs md:text-sm">

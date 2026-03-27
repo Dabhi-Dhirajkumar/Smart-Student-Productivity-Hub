@@ -10,7 +10,7 @@ export default function Analytics() {
            <h2 className="text-3xl font-bold font-poppins text-white flex items-center">
              Analytics & Reports <BarChart2 className="ml-3 text-accent" />
            </h2>
-           <p className="text-textMuted text-sm mt-1">AI detailed insights on your productivity trends.</p>
+           <p className="text-textMuted text-sm mt-1">System detailed insights on your productivity trends.</p>
         </div>
       </div>
 
@@ -61,19 +61,19 @@ export default function Analytics() {
       </div>
 
       <div className="glass-card p-6">
-         <h3 className="text-lg font-semibold text-white mb-6 flex items-center"><Activity size={18} className="mr-2 text-green-400" /> Recent AI Activity Logs</h3>
+         <h3 className="text-lg font-semibold text-white mb-6 flex items-center"><Activity size={18} className="mr-2 text-green-400" /> Recent System Activity Logs</h3>
          <div className="space-y-4">
             <div className="p-4 bg-white/5 rounded-xl border border-white/10 flex justify-between">
                <div>
                   <p className="text-sm text-white">"Show my urgent tasks"</p>
-                  <p className="text-xs text-textMuted mt-1">AI prioritized 3 tasks successfully.</p>
+                  <p className="text-xs text-textMuted mt-1">System prioritized 3 tasks successfully.</p>
                </div>
                <span className="text-xs text-textMuted">2 mins ago</span>
             </div>
             <div className="p-4 bg-white/5 rounded-xl border border-white/10 flex justify-between">
                <div>
                   <p className="text-sm text-white">"Create a schedule for tomorrow"</p>
-                  <p className="text-xs text-textMuted mt-1">AI updated calendar conflicts.</p>
+                  <p className="text-xs text-textMuted mt-1">System updated calendar conflicts.</p>
                </div>
                <span className="text-xs text-textMuted">5 hrs ago</span>
             </div>

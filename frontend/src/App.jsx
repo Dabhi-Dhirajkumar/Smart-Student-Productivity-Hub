@@ -19,6 +19,11 @@ import ResetPassword from './pages/auth/ResetPassword';
 import Feedback from './pages/Feedback';
 import Notices from './pages/Notices';
 import Users from './pages/Users';
+import Courses from './pages/Courses';
+import SystemLogs from './pages/SystemLogs';
+import StudentRoster from './pages/StudentRoster';
+import FocusTimer from './pages/FocusTimer';
+import Materials from './pages/Materials';
 
 export default function App() {
   return (
@@ -37,13 +42,19 @@ export default function App() {
         
         {/* Role-Specific Private Routes */}
         <Route path="/tasks" element={<PrivateRoute reqRole="Student"><Layout><Tasks /></Layout></PrivateRoute>} />
+        <Route path="/timer" element={<PrivateRoute reqRole="Student"><Layout><FocusTimer /></Layout></PrivateRoute>} />
+        <Route path="/roster" element={<PrivateRoute reqRole="Faculty"><Layout><StudentRoster /></Layout></PrivateRoute>} />
+        <Route path="/materials" element={<PrivateRoute><Layout><Materials /></Layout></PrivateRoute>} />
         <Route path="/schedule" element={<PrivateRoute><Layout><Schedule /></Layout></PrivateRoute>} />
         <Route path="/chat" element={<PrivateRoute><Layout><Chatbot /></Layout></PrivateRoute>} />
         <Route path="/analytics" element={<PrivateRoute><Layout><Analytics /></Layout></PrivateRoute>} />
         <Route path="/notifications" element={<PrivateRoute><Layout><Notifications /></Layout></PrivateRoute>} />
         <Route path="/notices" element={<PrivateRoute><Layout><Notices /></Layout></PrivateRoute>} />
         <Route path="/feedback" element={<PrivateRoute><Layout><Feedback /></Layout></PrivateRoute>} />
+        
         <Route path="/users" element={<PrivateRoute reqRole="Admin"><Layout><Users /></Layout></PrivateRoute>} />
+        <Route path="/courses" element={<PrivateRoute reqRole="Admin"><Layout><Courses /></Layout></PrivateRoute>} />
+        <Route path="/system-logs" element={<PrivateRoute reqRole="Admin"><Layout><SystemLogs /></Layout></PrivateRoute>} />
         
         <Route path="/profile" element={<PrivateRoute><Layout><Profile /></Layout></PrivateRoute>} />
         <Route path="/settings" element={<PrivateRoute><Layout><Settings /></Layout></PrivateRoute>} />

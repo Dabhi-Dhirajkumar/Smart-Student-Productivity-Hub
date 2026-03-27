@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Lock, ArrowRight, ShieldCheck } from 'lucide-react';
+import axios from 'axios';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const email = location.state?.email;
+  const otp = location.state?.otp;
 
-  const handleReset = (e) => {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  if (!email || !otp) {
+    navigate('/forgot-password');
+    return null;
+  }
+
+  const handleReset = async (e) => {
     e.preventDefault();
-    // Simulate API call, then redirect
-    alert("Password updated successfully!");
-    navigate('/login');
+    if (password !== confirmPassword) {
+       return setError("Passwords do not match");
+    }
+    
+    // Validate password pattern
+    if (!/(?=.*[A-Z])/.test(password) || !/(?=.*\d)/.test(password) || !/(?=.*[!@#$%^&*()_+\[\]{};':"\\|,.<>/?`~-])/.test(password)) {
+       return setError("Password must contain uppercase, number, and special character.");
+    }
+
+    setLoading(true);
+    setError('');
+    
+    try {
+      await axios.post('http://localhost:5000/api/auth/reset-password', { email, otp, newPassword: password });
+      alert("Password updated successfully!");
+      navigate('/login');
+    } catch (err) {
+      setLoading(false);
+      setError(err.response?.data?.error || 'Failed to reset password');
+    }
   };
 
   return (
@@ -27,11 +58,13 @@ export default function ResetPassword() {
          </div>
 
          <form onSubmit={handleReset} className="space-y-5">
+            {error && <div className="p-3 bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg text-sm text-center">{error}</div>}
+            
             <div>
                <label className="text-xs text-textMuted uppercase tracking-wider mb-2 block font-semibold">New Password</label>
                <div className="relative">
                   <Lock className="absolute left-4 top-3.5 text-textMuted" size={18} />
-                  <input type="password" required className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 pl-12 text-white focus:outline-none focus:border-primary focus:bg-white/10 transition-colors shadow-inner" placeholder="••••••••" />
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 pl-12 text-white focus:outline-none focus:border-primary focus:bg-white/10 transition-colors shadow-inner" placeholder="••••••••" />
                </div>
             </div>
 
@@ -39,12 +72,12 @@ export default function ResetPassword() {
                <label className="text-xs text-textMuted uppercase tracking-wider mb-2 block font-semibold">Confirm Password</label>
                <div className="relative">
                   <Lock className="absolute left-4 top-3.5 text-textMuted" size={18} />
-                  <input type="password" required className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 pl-12 text-white focus:outline-none focus:border-primary focus:bg-white/10 transition-colors shadow-inner" placeholder="••••••••" />
+                  <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required className="w-full bg-white/5 border border-white/10 rounded-xl p-3.5 pl-12 text-white focus:outline-none focus:border-primary focus:bg-white/10 transition-colors shadow-inner" placeholder="••••••••" />
                </div>
             </div>
 
-            <button type="submit" className="w-full btn-primary py-4 font-bold text-lg rounded-xl flex items-center justify-center mt-6 shadow-neon">
-               Save New Password <ArrowRight className="ml-2" size={18} />
+            <button type="submit" disabled={loading} className="w-full btn-primary py-4 font-bold text-lg rounded-xl flex items-center justify-center mt-6 shadow-neon disabled:opacity-50">
+               {loading ? 'Saving...' : 'Save New Password'} <ArrowRight className="ml-2" size={18} />
             </button>
          </form>
 
