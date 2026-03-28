@@ -72,7 +72,7 @@ export default function Signup() {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 md:p-10 relative z-10 rounded-3xl shadow-[0_0_40px_rgba(232,121,249,0.2)]">
          <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-white mb-2 tracking-wide">Create Account</h2>
-            <p className="text-textMuted text-sm">Join Campus Companion today.</p>
+            <p className="text-textMuted text-sm">Join Smart Student Productivity Hub today.</p>
          </div>
          
          {serverError && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg text-sm text-center">{serverError}</div>}

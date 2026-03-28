@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BookOpen, Link as LinkIcon, Download, Trash2, Plus, Server, User } from 'lucide-react';
+import { BookOpen, Link as LinkIcon, Download, Trash2, Plus, Server, User, Search, Filter } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,6 +11,8 @@ export default function Materials() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ title: '', subject: '', link: '' });
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('All');
 
   const isStaff = user?.role === 'Admin' || user?.role === 'Faculty';
 
@@ -46,26 +48,46 @@ export default function Materials() {
     window.open(url.startsWith('http') ? url : `https://${url}`, '_blank');
   };
 
+  const subjects = ['All', ...new Set(materials.map(m => m.subject))];
+
+  const filteredMaterials = materials.filter(m => {
+     const matchCategory = categoryFilter === 'All' || m.subject === categoryFilter;
+     const matchSearch = m.title.toLowerCase().includes(searchQuery.toLowerCase()) || m.subject.toLowerCase().includes(searchQuery.toLowerCase());
+     return matchCategory && matchSearch;
+  });
+
   return (
     <div className="space-y-6 font-poppins pb-10">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
            <h2 className="text-3xl font-bold text-textMain flex items-center">
              Study Materials <BookOpen className="ml-3 text-secondary" />
            </h2>
            <p className="text-textMuted text-sm mt-1">Cross-platform digital library for assigned curriculum content.</p>
         </div>
-        {isStaff && (
-          <button onClick={() => setIsModalOpen(true)} className="btn-secondary flex items-center justify-center whitespace-nowrap bg-primary/20 text-textMain">
-             <Plus size={18} className="mr-2"/> Upload Resource
-          </button>
-        )}
+        <div className="flex flex-col sm:flex-row gap-3">
+           <div className="relative flex-1 sm:w-64">
+              <Search className="absolute left-3 top-2.5 text-textMuted" size={16} />
+              <input type="text" placeholder="Search materials..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-white/5 border border-black/10 dark:border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-textMain focus:border-secondary focus:outline-none transition-colors" />
+           </div>
+           <div className="relative shrink-0">
+              <Filter className="absolute left-3 top-2.5 text-textMuted" size={16} />
+              <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="bg-white/5 border border-black/10 dark:border-white/10 rounded-xl py-2 pl-9 pr-8 text-sm text-textMuted focus:border-secondary focus:outline-none appearance-none cursor-pointer">
+                 {subjects.map((s, i) => <option key={i} value={s}>{s}</option>)}
+              </select>
+           </div>
+           {isStaff && (
+             <button onClick={() => setIsModalOpen(true)} className="btn-secondary flex items-center justify-center whitespace-nowrap bg-primary/20 text-textMain shadow-none">
+                <Plus size={18} className="mr-2"/> Upload
+             </button>
+           )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {loading && <div className="text-textMuted col-span-full">Syncing institutional records...</div>}
         <AnimatePresence>
-          {materials.map(mat => (
+          {filteredMaterials.map(mat => (
             <motion.div key={mat.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }} className="glass-card p-6 flex flex-col group relative hover:border-textMuted/30 transition-colors">
               <div className="flex justify-between items-start mb-4">
                  <div className="pr-4">
@@ -90,7 +112,7 @@ export default function Materials() {
             </motion.div>
           ))}
         </AnimatePresence>
-        {!loading && materials.length === 0 && <div className="text-textMuted col-span-full py-10 text-center border-dashed border-2 border-black/10 dark:border-white/10 rounded-2xl">No study materials have been uploaded by Staff yet.</div>}
+        {!loading && filteredMaterials.length === 0 && <div className="text-textMuted col-span-full py-10 text-center border-dashed border-2 border-black/10 dark:border-white/10 rounded-2xl">No study materials match your search filters.</div>}
       </div>
 
       {isModalOpen && (

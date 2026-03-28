@@ -1,15 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, AlertTriangle, CheckCircle, Info, Trash2 } from 'lucide-react';
-
-const initialNotifs = [
-  { id: 1, type: 'warning', text: "System predicts your 'Maths Assignment' will be delayed.", time: '10 mins ago', read: false },
-  { id: 2, type: 'info', text: "Suggested schedule generated for remaining tasks.", time: '2 hours ago', read: false },
-  { id: 3, type: 'success', text: "Task 'Web Tech Lab' completed successfully.", time: '1 day ago', read: true },
-];
+import axios from 'axios';
 
 export default function Notifications() {
-  const [notifications, setNotifs] = useState(initialNotifs);
+  const [notifications, setNotifs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/notifications');
+      setNotifs(res.data);
+    } catch (err) {
+      console.error('Failed to fetch notifications');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getIconAndStyle = (type) => {
     switch (type) {
@@ -20,8 +31,32 @@ export default function Notifications() {
     }
   };
 
-  const markAllRead = () => setNotifs(n => n.map(x => ({ ...x, read: true })));
-  const deleteNotif = (id) => setNotifs(n => n.filter(x => x.id !== id));
+  const markAllRead = async () => {
+    try {
+      await axios.put('http://localhost:5000/api/notifications/read');
+      setNotifs(n => n.map(x => ({ ...x, read: true })));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteNotif = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/notifications/${id}`);
+      setNotifs(n => n.filter(x => x.id !== id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Helper function to format timestamp
+  const formatTime = (timestamp) => {
+    const diff = Math.floor((new Date() - new Date(timestamp)) / 1000);
+    if (diff < 60) return `${diff} secs ago`;
+    if (diff < 3600) return `${Math.floor(diff / 60)} mins ago`;
+    if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+    return `${Math.floor(diff / 86400)} days ago`;
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 font-poppins">
@@ -37,7 +72,9 @@ export default function Notifications() {
 
       <div className="space-y-4">
         <AnimatePresence>
-          {notifications.length === 0 ? (
+          {loading ? (
+             <motion.div initial={{opacity: 0}} animate={{opacity: 1}} className="glass-card p-10 text-center text-textMuted">Loading notifications...</motion.div>
+          ) : notifications.length === 0 ? (
              <motion.div initial={{opacity: 0}} animate={{opacity: 1}} className="glass-card p-10 text-center text-textMuted">You have no new notifications.</motion.div>
           ) : (
             notifications.map((notif) => {
@@ -58,7 +95,7 @@ export default function Notifications() {
                      </div>
                      <div>
                         <p className={`text-sm ${notif.read ? 'text-textMuted' : 'text-white'}`}>{notif.text}</p>
-                        <p className="text-xs text-textMuted mt-1">{notif.time}</p>
+                        <p className="text-xs text-textMuted mt-1">{formatTime(notif.created_at)}</p>
                      </div>
                   </div>
                   <button onClick={() => deleteNotif(notif.id)} className="p-2 text-textMuted hover:text-red-400 transition-colors bg-black/20 rounded-lg shrink-0 sm:ml-4">

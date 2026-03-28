@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Megaphone, Plus, Trash2, Edit2 } from 'lucide-react';
+import { Megaphone, Plus, Trash2, Edit2, Search } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -9,6 +9,7 @@ export default function Notices() {
   const { user } = useAuth();
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [showModal, setShowModal] = useState(false);
   const [editId, setEditId] = useState(null);
@@ -57,6 +58,11 @@ export default function Notices() {
 
   const canEdit = user?.role === 'Admin' || user?.role === 'Faculty';
 
+  const filteredNotices = notices.filter(n => 
+    n.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    n.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="space-y-6 relative">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -64,15 +70,21 @@ export default function Notices() {
            <h2 className="text-3xl font-bold font-poppins text-white flex items-center">Campus Notices <Megaphone className="ml-3 text-secondary"/></h2>
            <p className="text-textMuted text-sm mt-1">Official announcements and university updates.</p>
         </div>
-        {canEdit && (
-          <button onClick={() => openModal()} className="btn-primary flex items-center shadow-neon mt-4 md:mt-0">
-             <Plus size={18} className="mr-2" /> Publish Notice
-          </button>
-        )}
+        <div className="flex flex-col sm:flex-row gap-3">
+           <div className="relative w-full sm:w-64 shrink-0">
+              <Search className="absolute left-3 top-2.5 text-textMuted" size={16} />
+              <input type="text" placeholder="Search notices..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-textMain focus:border-secondary focus:outline-none transition-colors" />
+           </div>
+           {canEdit && (
+             <button onClick={() => openModal()} className="btn-primary flex items-center shadow-neon shrink-0">
+                <Plus size={18} className="mr-2" /> Publish Notice
+             </button>
+           )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
-         {loading ? <p className="text-center text-textMuted w-full col-span-full">Loading notices...</p> : notices.map((n, i) => (
+         {loading ? <p className="text-center text-textMuted w-full col-span-full">Loading notices...</p> : filteredNotices.length === 0 ? <p className="text-center text-textMuted w-full col-span-full py-10">No notices match your search.</p> : filteredNotices.map((n, i) => (
            <motion.div key={n.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="glass-card p-6 flex flex-col justify-between">
               <div>
                  <div className="flex justify-between items-start mb-4 border-b border-white/10 pb-4">

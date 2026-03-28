@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS Notices CASCADE;
 DROP TABLE IF EXISTS Events CASCADE;
 DROP TABLE IF EXISTS Tasks CASCADE;
 DROP TABLE IF EXISTS Users CASCADE;
+DROP TABLE IF EXISTS Notifications CASCADE;
 
 CREATE TABLE Users (
     id SERIAL PRIMARY KEY,
@@ -16,6 +17,7 @@ CREATE TABLE Users (
     status VARCHAR(20) DEFAULT 'pending', -- pending, active, inactive
     reset_otp VARCHAR(10),
     reset_otp_expiry TIMESTAMP,
+    profile_picture TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -65,9 +67,18 @@ CREATE TABLE AI_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE Notifications (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES Users(id) ON DELETE CASCADE,
+    type VARCHAR(50) DEFAULT 'info',
+    text TEXT NOT NULL,
+    read BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Insert dummy notice (assigned to a null user for global broadcast if needed, or we just allow null user_id)
 ALTER TABLE Notices ALTER COLUMN user_id DROP NOT NULL;
-INSERT INTO Notices (title, content) VALUES ('Welcome to Campus Companion', 'Manage your workflow intelligently.');
+INSERT INTO Notices (title, content) VALUES ('Welcome to Smart Student Productivity Hub', 'Manage your workflow intelligently.');
 
 CREATE TABLE Materials (
     id SERIAL PRIMARY KEY,

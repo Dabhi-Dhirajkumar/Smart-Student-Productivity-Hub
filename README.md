@@ -1,4 +1,4 @@
-# Campus Companion - Smart Student Productivity Hub
+# Smart Student Productivity Hub
 
 A full-stack AI-powered student productivity web application. It helps students manage tasks, schedules, and priorities, while an AI assistant offers scheduling suggestions, predicts task delays, and automatically prioritizes assignments.
 

@@ -82,7 +82,7 @@ export default function Login() {
       <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="glass-card w-full max-w-md p-8 md:p-10 relative z-10 rounded-3xl shadow-[0_0_40px_rgba(107,33,168,0.2)]">
          <div className="text-center mb-10">
             <h2 className="text-3xl font-bold text-white mb-2 tracking-wide">Welcome Back</h2>
-            <p className="text-textMuted text-sm">Login to your Campus Companion.</p>
+            <p className="text-textMuted text-sm">Login to your Smart Student Productivity Hub.</p>
          </div>
 
          {serverError && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 text-red-400 rounded-lg text-sm text-center">{serverError}</div>}

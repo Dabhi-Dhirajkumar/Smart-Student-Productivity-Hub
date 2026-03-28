@@ -20,20 +20,21 @@ exports.register = async (req, res) => {
     const status = validRole === 'Admin' ? 'active' : 'pending';
 
     const result = await db.query(
-      'INSERT INTO Users (name, email, password_hash, role, status) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role, theme, status',
+      'INSERT INTO Users (name, email, password_hash, role, status) VALUES ($1, $2, $3, $4, $5) RETURNING id, name, email, role, theme, status, created_at, profile_picture',
       [name, email, password_hash, validRole, status]
     );
 
     // Send email to user
     const msgBody = `
-      <p style="text-align: center; font-size: 16px;">Thank you for registering on <strong>CampusHub</strong>.</p>
+      <p style="text-align: center; font-size: 16px;">Thank you for registering on <strong>Smart Student Productivity Hub</strong>.</p>
       <div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-left: 4px solid #f59e0b; padding: 15px; border-radius: 4px; margin: 20px 0; text-align: left;">
         <p style="margin: 0; color: #555;">Your account request has been successfully received and is currently <strong>pending admin approval</strong>.</p>
       </div>
       <p style="text-align: center; font-size: 14px; color: #777;">You will receive another email as soon as an administrator reviews and approves your account.</p>
     `;
     const emailHtml = getEmailTemplate('Registration Received', name, msgBody);
-    await sendEmail(email, 'Registration Received - Campus Companion', emailHtml);
+    await sendEmail(email, 'Registration Received - Smart Student Productivity Hub', emailHtml);
+    await db.query("INSERT INTO Notifications (user_id, type, text) VALUES ($1, 'info', 'Your account registration has been submitted and is pending approval.')", [result.rows[0].id]);
 
     res.status(201).json({ message: 'User registered successfully. Pending approval.', user: result.rows[0] });
   } catch (err) {
@@ -69,7 +70,8 @@ exports.login = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, theme: user.theme } });
+    res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role, theme: user.theme, created_at: user.created_at, profile_picture: user.profile_picture } });
+    db.query("INSERT INTO Notifications (user_id, type, text) VALUES ($1, 'success', 'You successfully logged into your account.')", [user.id]).catch(console.error);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error during login' });
@@ -103,7 +105,7 @@ exports.googleLogin = async (req, res) => {
       const newRole = 'Student'; // Default role for Google signups
       
       const insertResult = await db.query(
-        'INSERT INTO Users (name, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role, theme',
+        'INSERT INTO Users (name, email, password_hash, role) VALUES ($1, $2, $3, $4) RETURNING id, name, email, role, theme, created_at, profile_picture',
         [name, email, password_hash, newRole]
       );
       user = insertResult.rows[0];
@@ -118,7 +120,8 @@ exports.googleLogin = async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    res.json({ token: jwtToken, user: { id: user.id, name: user.name, email: user.email, role: user.role, theme: user.theme } });
+    res.json({ token: jwtToken, user: { id: user.id, name: user.name, email: user.email, role: user.role, theme: user.theme, created_at: user.created_at, profile_picture: user.profile_picture } });
+    db.query("INSERT INTO Notifications (user_id, type, text) VALUES ($1, 'success', 'Signed in via Google Workspace.')", [user.id]).catch(console.error);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server error during Google login' });
@@ -150,7 +153,8 @@ exports.forgotPassword = async (req, res) => {
     const userResult = result.rows[0];
     const emailHtml = getEmailTemplate('Password Reset Request', userResult.name, msgBody);
     
-    await sendEmail(email, 'Your Password Reset OTP - Campus Companion', emailHtml);
+    await sendEmail(email, 'Your Password Reset OTP - Smart Student Productivity Hub', emailHtml);
+    await db.query("INSERT INTO Notifications (user_id, type, text) VALUES ($1, 'warning', 'A password reset OTP was requested.')", [userResult.id]);
     res.json({ message: 'OTP sent to email' });
   } catch (err) {
     console.error(err);
@@ -193,6 +197,7 @@ exports.resetPassword = async (req, res) => {
     const password_hash = await bcrypt.hash(newPassword, salt);
     
     await db.query('UPDATE Users SET password_hash = $1, reset_otp = null, reset_otp_expiry = null WHERE email = $2', [password_hash, email]);
+    await db.query("INSERT INTO Notifications (user_id, type, text) VALUES ($1, 'success', 'Your password was successfully reset.')", [user.id]);
 
     res.json({ message: 'Password reset successful' });
   } catch (err) {

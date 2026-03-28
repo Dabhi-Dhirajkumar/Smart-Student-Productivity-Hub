@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (to, subject, html) => {
   try {
     const info = await transporter.sendMail({
-      from: '"Campus Companion" <noreply@campuscompanion.edu>',
+      from: '"Smart Student Productivity Hub" <noreply@campuscompanion.edu>',
       to,
       subject,
       html,

@@ -1,8 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, CheckSquare, MessageSquare, Calendar, Settings, Bell, Menu, X, User, BarChart2, BellRing, Megaphone, HelpCircle, LogOut, Users, Book, Terminal, Activity, CheckCircle, Database } from 'lucide-react';
+import { LayoutDashboard, CheckSquare, MessageSquare, Calendar, Settings, Bell, Menu, X, User, BarChart2, BellRing, Megaphone, HelpCircle, LogOut, Users, Book, Terminal, Activity, CheckCircle, Database, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+
+const LiveTimer = ({ createdAt }) => {
+  const [elapsed, setElapsed] = useState('');
+
+  useEffect(() => {
+    if (!createdAt) return;
+    
+    const updateTimer = () => {
+      const start = new Date(createdAt);
+      const now = new Date();
+      const diff = Math.floor((now - start) / 1000);
+      
+      const days = Math.floor(diff / (24 * 3600));
+      const hours = Math.floor((diff % (24 * 3600)) / 3600);
+      const mins = Math.floor((diff % 3600) / 60);
+      const secs = diff % 60;
+      
+      let str = '';
+      if (days > 0) str += `${days}d `;
+      str += `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      setElapsed(str);
+    };
+
+    updateTimer(); // initial call
+    const interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [createdAt]);
+
+  if (!createdAt) return null;
+
+  return (
+    <div className="text-[10px] text-accent font-mono mt-0.5 flex items-center bg-white/5 w-max px-1.5 py-0.5 rounded-full border border-white/10 shadow-[0_0_5px_rgba(107,33,168,0.3)]">
+      <Clock size={10} className="mr-1 text-primary" /> 
+      <span>{elapsed}</span>
+    </div>
+  );
+};
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -28,7 +65,7 @@ export default function Layout({ children }) {
     { icon: Megaphone, label: 'Notices', path: '/notices', roles: ['Student', 'Faculty', 'Admin'] },
     { icon: MessageSquare, label: 'Virtual Assistant', path: '/chat', roles: ['Student', 'Faculty'] },
     { icon: BarChart2, label: 'Analytics', path: '/analytics', roles: ['Student', 'Admin'] },
-    { icon: HelpCircle, label: 'Feedback', path: '/feedback', roles: ['Student', 'Faculty', 'Admin'] },
+    { icon: HelpCircle, label: 'Feedback', path: '/feedback', roles: ['Student', 'Admin'] },
     { icon: BellRing, label: 'Notifications', path: '/notifications', roles: ['Student', 'Faculty', 'Admin'] },
     { icon: Settings, label: 'Settings', path: '/settings', roles: ['Student', 'Faculty', 'Admin'] },
   ];
@@ -45,8 +82,8 @@ export default function Layout({ children }) {
         <div className="p-4 flex items-center justify-between">
           <AnimatePresence>
             {sidebarOpen && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="font-poppins font-bold text-xl neon-text tracking-wide truncate">
-                CampusHub
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="font-poppins font-bold text-[13px] leading-tight neon-text tracking-widest break-words pr-2">
+                Smart Student Productivity Hub
               </motion.div>
             )}
           </AnimatePresence>
@@ -88,7 +125,8 @@ export default function Layout({ children }) {
                {sidebarOpen && (
                  <div className="ml-3 truncate">
                    <p className="text-sm font-semibold text-white">{user?.name || 'Loading...'}</p>
-                   <p className="text-xs text-textMuted truncate">{user?.role || 'Guest'}</p>
+                   <p className="text-xs text-textMuted truncate leading-tight">{user?.role || 'Guest'}</p>
+                   {user?.created_at && <LiveTimer createdAt={user.created_at} />}
                  </div>
                )}
             </div>

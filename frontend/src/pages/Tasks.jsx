@@ -1,13 +1,15 @@
 import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, CheckCircle, Circle, AlertCircle, Sparkles, Trash2, Edit2 } from 'lucide-react';
+import { Plus, CheckCircle, Circle, AlertCircle, Sparkles, Trash2, Edit2, Search, Filter } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
   const [filter, setFilter] = useState('All');
+  const [priorityFilter, setPriorityFilter] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   
   // Create / Edit Modal State
@@ -95,7 +97,13 @@ export default function Tasks() {
     } catch (err) { console.error('System Error', err); }
   };
 
-  const filteredTasks = tasks.filter(t => filter === 'All' ? true : t.status === filter);
+  const filteredTasks = tasks.filter(t => {
+     const matchStatus = filter === 'All' ? true : t.status === filter;
+     const matchPriority = priorityFilter === 'All' ? true : t.priority === priorityFilter;
+     const matchSearch = t.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         (t.description && t.description.toLowerCase().includes(searchQuery.toLowerCase()));
+     return matchStatus && matchPriority && matchSearch;
+  });
 
   return (
     <div className="space-y-6 relative">

@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users as UsersIcon, Trash2, Check, X, Shield, ShieldOff } from 'lucide-react';
+import { Users as UsersIcon, Trash2, Check, X, Shield, ShieldOff, Search } from 'lucide-react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,6 +10,7 @@ export default function Users() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('requests');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchUsers();
@@ -67,14 +68,25 @@ export default function Users() {
   if (activeTab === 'students') displayUsers = studentHistory;
   if (activeTab === 'faculty') displayUsers = facultyHistory;
 
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    displayUsers = displayUsers.filter(u => u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q));
+  }
+
   return (
     <div className="space-y-6">
-      <div className="mb-6">
-         <h2 className="text-3xl font-bold text-white flex items-center">User Management <UsersIcon className="ml-3 text-red-400" /></h2>
-         <p className="text-textMuted text-sm mt-1">Admin control center for all platform accounts and registrations.</p>
+      <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+         <div>
+            <h2 className="text-3xl font-bold text-white flex items-center">User Management <UsersIcon className="ml-3 text-red-400" /></h2>
+            <p className="text-textMuted text-sm mt-1">Admin control center for all platform accounts and registrations.</p>
+         </div>
+         <div className="relative w-full md:w-64 shrink-0">
+            <Search className="absolute left-3 top-2.5 text-textMuted" size={16} />
+            <input type="text" placeholder="Search by name or email..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-white/5 border border-white/10 rounded-xl py-2 pl-9 pr-4 text-sm text-white focus:border-red-400 focus:outline-none transition-colors" />
+         </div>
       </div>
 
-      <div className="flex gap-4 mb-4 border-b border-white/10 pb-2">
+      <div className="flex gap-4 mb-4 border-b border-white/10 pb-2 overflow-x-auto">
         <button 
           onClick={() => setActiveTab('requests')} 
           className={`px-4 py-2 font-semibold transition-colors ${activeTab === 'requests' ? 'text-primary border-b-2 border-primary' : 'text-textMuted hover:text-white'}`}>

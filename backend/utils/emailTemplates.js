@@ -20,7 +20,7 @@ const getEmailTemplate = (title, name, messageBody) => {
   <body>
     <div class="container">
       <div class="header">
-        <h1>CampusHub</h1>
+        <h1>Smart Student Productivity Hub</h1>
         <p>Smart Student Productivity</p>
       </div>
       <div class="content">
@@ -29,10 +29,10 @@ const getEmailTemplate = (title, name, messageBody) => {
         <div style="margin: 25px 0;">
           ${messageBody}
         </div>
-        <p>Best Regards,<br/><strong>Campus Companion Team</strong></p>
+        <p>Best Regards,<br/><strong>Smart Student Productivity Hub Team</strong></p>
       </div>
       <div class="footer">
-        <p>&copy; ${new Date().getFullYear()} Campus Companion. All rights reserved.</p>
+        <p>&copy; ${new Date().getFullYear()} Smart Student Productivity Hub. All rights reserved.</p>
         <p>This is an automated message, please do not reply.</p>
       </div>
     </div>

@@ -54,7 +54,7 @@ async function seed() {
     await client.query(`
       INSERT INTO Notices (title, content) VALUES
       ('Campus Library Hours Extended', 'The library will now remain open until 2 AM during finals week.'),
-      ('System Maintenance', 'CampusHub will undergo upgrades at midnight. Expect limited connectivity.')
+      ('System Maintenance', 'Smart Student Productivity Hub will undergo upgrades at midnight. Expect limited connectivity.')
     `);
 
     // Insert Tasks

@@ -18,6 +18,7 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 const aiRoutes = require('./routes/aiRoutes');
 const courseRoutes = require('./routes/courseRoutes');
 const materialRoutes = require('./routes/materialRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -28,6 +29,7 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/materials', materialRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Backend is running' });

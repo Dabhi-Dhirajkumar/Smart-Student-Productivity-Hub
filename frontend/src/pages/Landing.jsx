@@ -30,7 +30,7 @@ export default function Landing() {
       {/* Navbar */}
       <nav className="flex justify-between items-center p-6 md:px-12 relative z-10 glass-card m-4 rounded-full border border-black/5 dark:border-white/5 shadow-lg">
          <div className="text-xl font-bold neon-text tracking-wide flex items-center">
-            <Sparkles className="mr-2" size={24} /> CampusHub
+            <Sparkles className="mr-2" size={24} /> Smart Student Productivity Hub
          </div>
          <div className="flex space-x-3 items-center">
             <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 text-textMain transition-colors cursor-pointer mr-2" aria-label="Toggle Theme">
@@ -48,7 +48,7 @@ export default function Landing() {
                The Future of Student Productivity
             </span>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold text-textMain leading-tight mt-4 tracking-tight">
-               Meet Your <span className="bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text">Smart System</span> <br/> Campus Companion
+               Meet Your <span className="bg-gradient-to-r from-primary via-secondary to-accent text-transparent bg-clip-text">Smart System</span> <br/> Smart Student Productivity Hub
             </h1>
             <p className="mt-8 text-lg md:text-xl text-textMuted max-w-3xl mx-auto leading-relaxed">
                Intelligently organize your tasks, get dynamic schedule optimizations, and stay ahead of your deadlines with our predictive system engine designed strictly for high-performing students.
@@ -125,7 +125,7 @@ export default function Landing() {
                      <div className="w-12 h-12 rounded-full glass-card flex items-center justify-center text-secondary font-bold text-xl shrink-0 mr-5 border border-secondary/30 shadow-[0_0_15px_rgba(14,165,233,0.3)]">2</div>
                      <div>
                         <h4 className="text-xl font-bold text-textMain mb-2">Input Your Parameters</h4>
-                        <p className="text-textMuted leading-relaxed">Provide your tasks, events, and focus limits. CampusHub scales immediately to shape around your specific data map.</p>
+                        <p className="text-textMuted leading-relaxed">Provide your tasks, events, and focus limits. Smart Student Productivity Hub scales immediately to shape around your specific data map.</p>
                      </div>
                   </div>
                   <div className="flex items-start">
@@ -158,7 +158,7 @@ export default function Landing() {
          <div className="max-w-5xl mx-auto glass-card rounded-[3rem] p-12 lg:p-20 text-center border-t border-black/10 dark:border-white/20 shadow-[0_0_50px_rgba(232,121,249,0.15)] relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-accent/20 pointer-events-none"></div>
             <h2 className="text-4xl md:text-6xl font-black text-textMain mb-6 relative z-10 tracking-tight">Ready to supercharge your grades?</h2>
-            <p className="text-xl text-textMuted mb-12 max-w-2xl mx-auto relative z-10">Join thousands of students and faculty members orchestrating their academic ecosystems on CampusHub today.</p>
+            <p className="text-xl text-textMuted mb-12 max-w-2xl mx-auto relative z-10">Join thousands of students and faculty members orchestrating their academic ecosystems on Smart Student Productivity Hub today.</p>
             <Link to="/signup" className="inline-flex btn-primary px-10 py-5 text-xl font-bold rounded-full items-center shadow-[0_0_40px_rgba(107,33,168,0.5)] hover:scale-105 transition-transform relative z-10">
                Create Free Account <ArrowRight className="ml-3" size={24} />
             </Link>
@@ -169,8 +169,8 @@ export default function Landing() {
       <footer className="border-t border-black/10 dark:border-white/5 pt-20 pb-10 px-6 md:px-12 relative z-10 bg-black/5 dark:bg-white/5 mt-auto">
          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 lg:gap-8 mb-16">
             <div className="lg:col-span-2 pr-4">
-               <div className="flex items-center text-2xl font-bold text-textMain mb-6">
-                  <Sparkles className="mr-2 text-primary" size={28} /> CampusHub
+               <div className="flex items-center text-lg md:text-xl font-bold text-textMain mb-6">
+                  <Sparkles className="mr-2 text-primary shrink-0" size={24} /> Smart Student Productivity Hub
                </div>
                <p className="text-textMuted text-sm leading-relaxed max-w-sm mb-6">
                   The ultimate intelligent ecosystem designed to orchestrate the chaotic academic lives of students, providing predictive pathways to absolute success and stress-free graduation.
@@ -223,7 +223,7 @@ export default function Landing() {
          
          <div className="max-w-7xl mx-auto pt-8 border-t border-black/10 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-textMuted text-xs font-mono">
-               &copy; {new Date().getFullYear()} CampusHub Inc. All rights reserved. Built for high-performing students.
+               &copy; {new Date().getFullYear()} Smart Student Productivity Hub. All rights reserved. Built for high-performing students.
             </div>
             <div className="flex items-center space-x-2 text-xs text-textMuted">
                <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>

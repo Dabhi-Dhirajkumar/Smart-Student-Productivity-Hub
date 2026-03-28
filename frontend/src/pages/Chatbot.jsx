@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hello! I am your System Campus Companion. You can ask me to organize your schedule or prioritize tasks.", sender: 'ai' }
+    { id: 1, text: "Hello! I am your System Smart Student Productivity Hub. You can ask me to organize your schedule or prioritize tasks.", sender: 'ai' }
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
